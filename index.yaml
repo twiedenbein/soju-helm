@@ -1,0 +1,33 @@
+apiVersion: v1
+entries:
+  soju:
+  - apiVersion: v2
+    appVersion: 0.10.1
+    created: "2026-03-19T14:52:05.152332157Z"
+    dependencies:
+    - condition: gamja.enabled
+      name: gamja
+      repository: ""
+      version: 0.1.0
+    description: A Helm chart for deploying soju IRC bouncer with gamja web client
+    digest: 8f359d89716b3b87e48f9433153f17f85a451a10fb7e2e640dc09748c61c43f4
+    home: https://github.com/adamancini/soju-helm
+    keywords:
+    - soju
+    - irc
+    - bouncer
+    - gamja
+    - websocket
+    maintainers:
+    - name: adamancini
+      url: https://github.com/adamancini
+    name: soju
+    sources:
+    - https://codeberg.org/emersion/soju
+    - https://codeberg.org/emersion/gamja
+    - https://github.com/adamancini/soju-helm
+    type: application
+    urls:
+    - https://twiedenbein.github.io/soju-helm/soju-0.1.6.tgz
+    version: 0.1.6
+generated: "2026-03-19T14:52:05.1512804Z"
