@@ -56,9 +56,12 @@ Returns the full "db <driver> <source>" line content
 {{- if eq .Values.database.driver "sqlite3" -}}
 sqlite3 {{ .Values.database.sqlite.path }}
 {{- else if eq .Values.database.driver "postgres" -}}
-postgres "host={{ include "soju.postgresql.host" . }} port={{ .Values.database.postgres.port }} dbname={{ .Values.database.postgres.database }} user={{ .Values.database.postgres.user }} password=POSTGRES_PASSWORD sslmode={{ .Values.database.postgres.sslmode }}"
+{{- $secret := lookup "v1" "Secret" .Release.Namespace .Values.database.postgres.existingSecret -}}
+{{- $password := index $secret.data .Values.database.postgres.passwordKey | b64dec -}}
+postgres "host={{ include "soju.postgresql.host" . }} port={{ .Values.database.postgres.port }} dbname={{ .Values.database.postgres.database }} user={{ .Values.database.postgres.user }} password={{ $password }} sslmode={{ .Values.database.postgres.sslmode }}"
 {{- end -}}
 {{- end -}}
+   
 
 {{/*
 PostgreSQL host helper
