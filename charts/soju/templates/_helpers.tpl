@@ -53,14 +53,15 @@ Database DSN for soju.conf
 Returns the full "db <driver> <source>" line content
 */}}
 {{- define "soju.databaseDSN" -}}
-{{- if eq .Values.database.driver "sqlite3" -}}
-sqlite3 {{ .Values.database.sqlite.path }}
-{{- else if eq .Values.database.driver "postgres" -}}
-{{- $secret := lookup "v1" "Secret" .Release.Namespace .Values.database.postgres.existingSecret -}}
-{{- $password := index $secret.data .Values.database.postgres.passwordKey | b64dec -}}
-postgres "host={{ include "soju.postgresql.host" . }} port={{ .Values.database.postgres.port }} dbname={{ .Values.database.postgres.database }} user={{ .Values.database.postgres.user }} password={{ $password }} sslmode={{ .Values.database.postgres.sslmode }}"
-{{- end -}}
-{{- end -}}
+   {{- if eq .Values.database.driver "sqlite3" -}}
+   sqlite3 {{ .Values.database.sqlite.path }}
+   {{- else if eq .Values.database.driver "postgres" -}}
+   {{- $secret := lookup "v1" "Secret" .Release.Namespace .Values.database.postgres.existingSecret | default (dict "data" (dict)) -}}
+   {{- $passwordRaw := index $secret.data .Values.database.postgres.passwordKey | default (b64enc "POSTGRES_PASSWORD") -}}
+   {{- $password := $passwordRaw | b64dec -}}
+   postgres "host={{ include "soju.postgresql.host" . }} port={{ .Values.database.postgres.port }} dbname={{ .Values.database.postgres.database }} user={{ .Values.database.postgres.user }} password={{ $password }} sslmode={{ .Values.database.postgres.sslmode }}"
+   {{- end -}}
+   {{- end -}}
    
 
 {{/*
